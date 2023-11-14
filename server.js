@@ -8,9 +8,8 @@ const morgan = require("morgan");
 
 const app = express();
 const port = process.env.PORT ? Number(process.env.PORT) : 3333;
+const client = mqtt.connect("https://mqtt.eclipseprojects.io/");
 const condi = {};
-
-//configurando o JSON / middlewares
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -18,8 +17,6 @@ app.use(cors());
 app.use(helmet());
 app.use(compression());
 app.use(morgan("combined"));
-
-const client = mqtt.connect("https://mqtt.eclipseprojects.io/");
 
 client.on("connect", () => {
   client.subscribe("DHT11_temperatura_pintura_teste01");
