@@ -24,6 +24,7 @@ const client = mqtt.connect("https://mqtt.eclipseprojects.io/");
 client.on("connect", () => {
   client.subscribe("DHT11_temperatura_pintura_teste01");
   client.subscribe("DHT11_umidade_pintura_teste01");
+  client.subscribe("cron_ink_start");
 });
 
 client.on("message", (topic, payload) => {
@@ -35,6 +36,16 @@ client.on("message", (topic, payload) => {
   app.get("/condicao", (req, res) => {
     res.send(condi);
   });
+});
+
+app.post("/potlife", (req, res) => {
+  const potlife = req.body.potlife.toString();
+  res.send("POST recebido com sucesso");
+
+  if (potlife) {
+    console.log(potlife);
+    client.publish("cron_ink_start", potlife);
+  }
 });
 
 app.listen(port, () => {
