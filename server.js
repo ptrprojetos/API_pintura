@@ -30,7 +30,7 @@ client.on('message', (topic, payload) => {
   } else if (topic === 'DHT11_umidade_pintura_teste01') {
     condi.umidade = payload.toString();
   }
-  app.get('/condicao', (req, res) => {
+  app.get('/pontodeorvalho', (req, res) => {
     res.send(condi);
   });
 });
@@ -45,6 +45,8 @@ app.post('/potlife', (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server has started on port: ${port}`);
+const server = app.listen(1000, '172.31.98.229', () => {
+  const host = server.address().address;
+  const port = server.address().port;
+  console.log(`server running:  http://${host}:${port}/`);
 });
