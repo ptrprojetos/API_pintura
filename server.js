@@ -7,7 +7,6 @@ const compression = require('compression');
 const morgan = require('morgan');
 
 const app = express();
-const port = process.env.PORT ? Number(process.env.PORT) : 3333;
 const client = mqtt.connect('https://mqtt.eclipseprojects.io/');
 const condi = {};
 
@@ -45,8 +44,6 @@ app.post('/potlife', (req, res) => {
   }
 });
 
-const server = app.listen(1000, '172.31.98.229', () => {
-  const host = server.address().address;
-  const port = server.address().port;
-  console.log(`server running:  http://${host}:${port}/`);
+app.listen(3333, () => {
+  console.log('running!');
 });
