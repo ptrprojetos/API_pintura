@@ -1,49 +1,15 @@
-const mqtt = require('mqtt');
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-const helmet = require('helmet');
-const compression = require('compression');
-const morgan = require('morgan');
+const { apiRouter } = require('./src/routes/routers');
 
-const app = express();
-const client = mqtt.connect('https://mqtt.eclipseprojects.io/');
-const condi = {};
+const server = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(cors());
-app.use(helmet());
-app.use(compression());
-app.use(morgan('combined'));
+server.use(cors());
+server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
 
-client.on('connect', () => {
-  client.subscribe('DHT11_temperatura_pintura_teste01');
-  client.subscribe('DHT11_umidade_pintura_teste01');
-  client.subscribe('cron_ink_start');
-});
+server.use('/api', apiRouter);
 
-client.on('message', (topic, payload) => {
-  if (topic === 'DHT11_temperatura_pintura_teste01') {
-    condi.temperatura = payload.toString();
-  } else if (topic === 'DHT11_umidade_pintura_teste01') {
-    condi.umidade = payload.toString();
-  }
-  app.get('/pontodeorvalho', (req, res) => {
-    res.send(condi);
-  });
-});
-
-app.post('/potlife', (req, res) => {
-  const potlife = req.body.potlife.toString();
-  res.send('POST recebido com sucesso');
-
-  if (potlife) {
-    console.log(potlife);
-    client.publish('cron_ink_start', potlife);
-  }
-});
-
-app.listen(3333, () => {
+server.listen(3333, () => {
   console.log('running!');
 });
