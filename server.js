@@ -8,7 +8,7 @@ server.use(cors());
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
-server.use('/api', apiRouter);
+server.use('/api/', apiRouter);
 
 server.use((req, res) => {
   res.status(404).json({ error: 'endpoint not fould' });
