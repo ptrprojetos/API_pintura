@@ -29,7 +29,10 @@ const getTempAndUmi02 = async (req, res) => {
 const getTempAndUmi = async (req, res) => {
   try {
     const response = await fetchDatas();
-    res.json(response);
+    console.log(response.mensage)
+    if(response.mensage === 'Não foi possível obter os dados em 10 segundos')
+    return res.status(400).json({message: 'erro ao conectar com sensores'})
+  else return res.status(200).json(response);
   } catch (error) {
     res.status(500).json({
       error: 'Erro interno do servidor',
